@@ -62,6 +62,6 @@ npm run dev
 
 ### Notes
 
-Ensure PostgreSQL is running before starting the backend.
-CORS is configured to allow requests from the frontend.
-This is a test project and does not include authentication.
+- Ensure PostgreSQL is running before starting the backend.
+- CORS is configured to allow requests from the frontend.
+- This is a test project and does not include authentication.
