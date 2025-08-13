@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "./api/axios";
 
 function AddTaskForm() {
@@ -6,13 +6,38 @@ function AddTaskForm() {
   const [email, setEmail] = useState("");
   const [passwordHash, setPasswordHash] = useState("");
   const [userId, setUserId] = useState("");
+  const [exist, setExist] = useState(false);
+
+  useEffect(() => {
+    if (!userId) {
+      setExist(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const res = await api.get(`/users/${userId}`);
+        setExist(res.status === 200);
+      } catch (err) {
+        if (err.response?.status === 404) {
+          setExist(false);
+        } else {
+          console.error(err);
+        }
+      }
+    };
+
+    fetchData();
+  }, [userId]);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     let userExists = false;
+    let data;
+    let id;
 
     try {
-      const userCheck = await api.get(`/tasks/${userId}`);
-      console.log(userCheck);
+      const userCheck = await api.get(`/users/${userId}`);
       if (userCheck.status === 200) {
         userExists = true;
       }
@@ -26,22 +51,32 @@ function AddTaskForm() {
       }
     }
 
-    if (userExists) {
-      alert(`User with ID ${userId} already exists use a different User ID!`);
-      return;
+    try {
+      const res = await api.get("/tasks");
+      id = res.data.length + 1;
+    } catch (error) {
+      console.error("Error checking user:", error);
     }
 
-    const data = {
-      id: Number(userId),
-      title: title,
-      userId: Number(userId),
-      user: {
-        id: Number(userId),
-        email: email,
-        passwordHash: passwordHash,
-        tasks: [],
-      },
-    };
+    if (userExists) {
+      data = {
+        id: id,
+        title: title,
+        userId: Number(userId),
+      };
+    } else {
+      data = {
+        id: id,
+        title: title,
+        userId: Number(userId),
+        user: {
+          id: Number(userId),
+          email: email,
+          passwordHash: passwordHash,
+          tasks: [],
+        },
+      };
+    }
 
     try {
       const res = await api.post("/tasks", data);
@@ -49,6 +84,9 @@ function AddTaskForm() {
       setTitle("");
       setEmail("");
       setPasswordHash("");
+      setUserId("");
+      setExist(false);
+      window.location.reload();
     } catch (err) {
       console.error("Error creating task:", err);
     }
@@ -77,24 +115,25 @@ function AddTaskForm() {
         placeholder="User ID"
         type="number"
       />
+      {!exist && (
+        <>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="User email"
+            type="email"
+            required
+          />
+          <input
+            value={passwordHash}
+            onChange={(e) => setPasswordHash(e.target.value)}
+            placeholder="Password hash"
+            required
+          />
+        </>
+      )}
 
-      <>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="User email"
-          type="email"
-          required
-        />
-        <input
-          value={passwordHash}
-          onChange={(e) => setPasswordHash(e.target.value)}
-          placeholder="Password hash"
-          required
-        />
-      </>
-
-      <button onClick={() => handleSubmit()}>Add Task</button>
+      <button type="submit">Add Task</button>
     </form>
   );
 }
