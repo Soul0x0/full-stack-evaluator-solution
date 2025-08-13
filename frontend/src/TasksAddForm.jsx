@@ -80,7 +80,6 @@ function AddTaskForm() {
 
     try {
       const res = await api.post("/tasks", data);
-      console.log("Task created:", res.data);
       setTitle("");
       setEmail("");
       setPasswordHash("");
