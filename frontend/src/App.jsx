@@ -6,7 +6,9 @@ function App() {
   return (
     <div className="app">
       <h1>📝 React Task Evaluator</h1>
-      <AddTaskForm />
+      <div className="add_task">
+        <AddTaskForm />
+      </div>
       <Tasks />
     </div>
   );

@@ -40,3 +40,23 @@
 .read-the-docs {
   color: #888;
 }
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* form on left, tasks on right */
+  gap: 20px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  grid-column: 1 / -1; /* span both columns */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add_task {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
