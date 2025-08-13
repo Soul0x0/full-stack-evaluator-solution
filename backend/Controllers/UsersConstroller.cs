@@ -25,5 +25,18 @@ namespace TaskManager.API
                 .ToListAsync();
             return Ok(users);
         }
+
+        // GET /users/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
     }
 }
