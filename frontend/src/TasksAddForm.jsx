@@ -8,8 +8,6 @@ function AddTaskForm() {
   const [userId, setUserId] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
     let userExists = false;
 
     try {
@@ -96,7 +94,7 @@ function AddTaskForm() {
         />
       </>
 
-      <button type="submit">Add Task</button>
+      <button onClick={() => handleSubmit()}>Add Task</button>
     </form>
   );
 }
