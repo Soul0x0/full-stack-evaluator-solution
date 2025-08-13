@@ -1,5 +1,5 @@
-import './App.css'
-import Tasks from "./Tasks"
+import "./App.css";
+import Tasks from "./Tasks";
 
 function App() {
   return (
@@ -10,4 +10,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
