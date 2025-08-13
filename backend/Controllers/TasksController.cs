@@ -25,6 +25,19 @@ namespace TaskManager.API
             var tasks = await _context.Tasks.ToListAsync();
             return Ok(tasks);
         }
+ 
+        [HttpGet("{id}") ]
+        public async Task<IActionResult> Get(int id)
+        {
+            var task = await _context.Tasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] TaskItem task)
